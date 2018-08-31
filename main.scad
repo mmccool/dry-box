@@ -114,6 +114,52 @@ module lock() {
   }
 }
 
+clamp_r = 4;
+clamp_sm = 20*sm_base;
+clamp_h = 50;
+clamp_s = 2 + 1;
+clamp_w = 22;
+clamp_q = 33 + 2*clamp_r;
+clamp_q1 = 21 + clamp_r;
+clamp_p = 14;
+clamp_i = 8.5;
+clamp_i2 = 16;
+clamp_j = 4;
+module clamp() {
+  hull() {
+    translate([0,clamp_i,0]) cylinder(r=clamp_r,h=clamp_h,$fn=clamp_sm);
+    translate([0,0,0]) cylinder(r=clamp_r,h=clamp_h,$fn=clamp_sm);
+  }  
+  hull() {
+    translate([0,clamp_i2,0]) cylinder(r=clamp_r,h=clamp_h/4,$fn=clamp_sm);
+    translate([0,clamp_i,0]) cylinder(r=clamp_r,h=clamp_h/2-clamp_s/2,$fn=clamp_sm);
+  }
+  hull() {
+    translate([0,clamp_i2,3*clamp_h/4]) cylinder(r=clamp_r,h=clamp_h/4,$fn=clamp_sm);
+    translate([0,,clamp_i,clamp_h/2+clamp_s/2]) cylinder(r=clamp_r,h=clamp_h/2-clamp_s/2,$fn=clamp_sm);
+  }
+  hull() {
+    translate([0,0,0]) cylinder(r=clamp_r,h=clamp_h,$fn=clamp_sm);
+    translate([2*clamp_r+clamp_s,0,0]) cylinder(r=clamp_r,h=clamp_h,$fn=clamp_sm);
+  }
+  hull() {
+    translate([2*clamp_r+clamp_s,0,0]) cylinder(r=clamp_r,h=clamp_h,$fn=clamp_sm);
+    translate([2*clamp_r+clamp_s,clamp_q1,0]) cylinder(r=clamp_r,h=clamp_h,$fn=clamp_sm);
+  }
+  hull() {
+    translate([2*clamp_r+clamp_s,clamp_q1,0]) cylinder(r=clamp_r,h=clamp_h,$fn=clamp_sm);
+    translate([2*clamp_r+clamp_s-clamp_j,clamp_q,0]) cylinder(r=clamp_r,h=clamp_h,$fn=clamp_sm);
+  }
+  hull() {
+    translate([2*clamp_r+clamp_s-clamp_j,clamp_q,0]) cylinder(r=clamp_r,h=clamp_h,$fn=clamp_sm);
+    translate([clamp_r+clamp_s-clamp_j-clamp_p,clamp_q,0]) cylinder(r=clamp_r,h=clamp_h,$fn=clamp_sm);
+  }
+  hull() {
+    translate([clamp_r+clamp_s-clamp_j-clamp_p,clamp_q,0]) cylinder(r=clamp_r,h=clamp_h,$fn=clamp_sm);
+    translate([clamp_r+clamp_s-clamp_j-clamp_p,clamp_q-2,0]) cylinder(r=clamp_r,h=clamp_h,$fn=clamp_sm);
+  }
+}
+
 module assembly() {
   support();
   color([0.5,0,0,1]) 
@@ -126,7 +172,9 @@ module assembly() {
   }
 }
 
-assembly();
+//assembly();
 //rotate(180) lock();
 //base();
 //support(); // better to just print two base/lock combos
+
+clamp();
