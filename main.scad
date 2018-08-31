@@ -119,29 +119,31 @@ clamp_sm = 20*sm_base;
 clamp_h = 50;
 clamp_s = 2 + 1;
 clamp_w = 22;
-clamp_q = 33.5 + 2*clamp_r;
+clamp_e = 2;
+clamp_q = 33.5 + clamp_e + 2*clamp_r;
 clamp_q1 = 21 + clamp_r;
 clamp_p = 14;
 clamp_i = 8.5;
 clamp_i2 = 16;
 clamp_j = 4;
+clamp_k = 3;
 module clamp() {
   hull() {
-    translate([0,clamp_i,0]) cylinder(r=clamp_r,h=clamp_h,$fn=clamp_sm);
-    translate([0,0,0]) cylinder(r=clamp_r,h=clamp_h,$fn=clamp_sm);
+    translate([-clamp_k,clamp_i,0]) cylinder(r=clamp_r,h=clamp_h,$fn=clamp_sm);
+    translate([-clamp_k,0,0]) cylinder(r=clamp_r,h=clamp_h,$fn=clamp_sm);
   }  
 /*
   hull() {
-    translate([0,clamp_i2,0]) cylinder(r=clamp_r,h=clamp_h/4,$fn=clamp_sm);
-    translate([0,clamp_i,0]) cylinder(r=clamp_r,h=clamp_h/2-clamp_s/2,$fn=clamp_sm);
+    translate([-clamp_k,clamp_i2,0]) cylinder(r=clamp_r,h=clamp_h/4,$fn=clamp_sm);
+    translate([-clamp_k,clamp_i,0]) cylinder(r=clamp_r,h=clamp_h/2-clamp_s/2,$fn=clamp_sm);
   }
   hull() {
-    translate([0,clamp_i2,3*clamp_h/4]) cylinder(r=clamp_r,h=clamp_h/4,$fn=clamp_sm);
-    translate([0,,clamp_i,clamp_h/2+clamp_s/2]) cylinder(r=clamp_r,h=clamp_h/2-clamp_s/2,$fn=clamp_sm);
+    translate([-clamp_k,clamp_i2,3*clamp_h/4]) cylinder(r=clamp_r,h=clamp_h/4,$fn=clamp_sm);
+    translate([-clamp_k,clamp_i,clamp_h/2+clamp_s/2]) cylinder(r=clamp_r,h=clamp_h/2-clamp_s/2,$fn=clamp_sm);
   }
 */
   hull() {
-    translate([0,0,0]) cylinder(r=clamp_r,h=clamp_h,$fn=clamp_sm);
+    translate([-clamp_k,0,0]) cylinder(r=clamp_r,h=clamp_h,$fn=clamp_sm);
     translate([2*clamp_r+clamp_s,0,0]) cylinder(r=clamp_r,h=clamp_h,$fn=clamp_sm);
   }
   hull() {
