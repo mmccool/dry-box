@@ -28,8 +28,7 @@ support_B = support_b + support_q;
 support_r = rod_R + support_t;
 support_T = 15;
 support_R = support_r + support_T;
-support_sm = 32;
-support_osm = 20*sm_base;
+support_sm = 20*sm_base;
 
 case_a = 1.7;
 
@@ -41,15 +40,21 @@ bolt_sm = 5*sm_base;
 
 rod_h = 100; // testing only
 
+lock_tol = 0.05; // tight enough so polygons interlock
+lock_sm = 32;
+lock_detent_r = 1/3; // extra insurance against slipping
+lock_detent_sm = 8;
+lock_detent_a = 59;
+
 module support() {
   difference() {
     union() {
-      cylinder(r=support_R,h=support_b,$fn=support_osm);
-      cylinder(r=support_r-support_i,h=support_h,$fn=support_sm);
+      cylinder(r=support_R,h=support_b,$fn=support_sm);
+      cylinder(r=support_r-support_i,h=support_h,$fn=lock_sm);
       translate([0,0,support_B-eps]) 
-        cylinder(r1=support_r-support_i,r2=support_r,h=support_i+2*eps,$fn=support_sm);
+        cylinder(r1=support_r-support_i,r2=support_r,h=support_i+2*eps,$fn=lock_sm);
       translate([0,0,support_B+support_i]) 
-        cylinder(r=support_r,h=support_h-support_B-support_i,$fn=support_sm);
+        cylinder(r=support_r,h=support_h-support_B-support_i,$fn=lock_sm);
     }
     translate([0,0,support_B])
       cylinder(r=rod_R,h=support_h,$fn=rod_sm);
@@ -82,8 +87,11 @@ module base() {
   }
 }
 
-lock_tol = 0.2;
 module lock() {
+  rotate(lock_detent_a) translate([-support_r-lock_tol,0,support_B-2*tol])
+    cylinder(r=lock_detent_r,h=support_b+tol,$fn=lock_detent_sm);
+  rotate(-lock_detent_a) translate([-support_r-lock_tol,0,support_B-2*tol])
+    cylinder(r=lock_detent_r,h=support_b+tol,$fn=lock_detent_sm);
   difference() {
     union() {
       translate([0,0,support_b+support_t-1+tol]) 
@@ -92,26 +100,33 @@ module lock() {
         cylinder(r1=support_r+1,r2=support_r+support_t,h=support_t-1,$fn=support_sm);
     }
     translate([0,0,support_b-1]) 
-      cylinder(r=support_r-support_i+lock_tol,h=support_h+2,$fn=support_sm);
+      cylinder(r=support_r-support_i+lock_tol,h=support_h+2,$fn=lock_sm);
     translate([0,0,support_B-2*tol]) 
-      cylinder(r1=support_r-support_i+lock_tol,r2=support_r+lock_tol,h=support_i+2*tol,$fn=support_sm);
+      cylinder(r1=support_r-support_i+lock_tol,r2=support_r+lock_tol,h=support_i+2*tol,$fn=lock_sm);
     translate([0,0,support_B+support_i]) 
-      cylinder(r=support_r+lock_tol,h=support_h,$fn=support_sm);
+      cylinder(r=support_r+lock_tol,h=support_h,$fn=lock_sm);
     hull() {
       translate([0,0,-1])
-        cylinder(r=rod_R,h=support_h+2,$fn=support_sm);
+        cylinder(r=rod_R,h=support_h+2,$fn=lock_sm);
       translate([support_R,0,support_B])
-        cylinder(r=rod_R-rod_c,h=support_h+2,$fn=support_sm);
+        cylinder(r=rod_R-rod_c,h=support_h+2,$fn=lock_sm);
     }
   }
 }
 
-support();
-color([0.5,0,0,1]) 
-  translate([0,0,support_b]) 
-    cylinder(r=rod_r,h=rod_h-2*support_b,$fn=rod_sm);
-translate([0,0,100]) rotate([180,0,0]) {
-  base();
-  rotate(180) 
-    color([0,0.5,0,1]) lock();
+module assembly() {
+  support();
+  color([0.5,0,0,1]) 
+    translate([0,0,support_b]) 
+      cylinder(r=rod_r,h=rod_h-2*support_b,$fn=rod_sm);
+  translate([0,0,100]) rotate([180,0,0]) {
+    base();
+    rotate(180) 
+      color([0,0.5,0,1]) lock();
+  }
 }
+
+assembly();
+//rotate(180) lock();
+//base();
+//support(); // better to just print two base/lock combos
