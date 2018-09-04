@@ -211,6 +211,29 @@ module plate2() {
   }
 }
 
+dm_r = 16/2;
+dm_R = 10;
+dm_t = 10;
+dm_T = 5;
+dm_o = 9;
+dm_w = 51.3;
+dm_br = 4.2/2;
+dm_bsm = 4*sm_base;
+dm_sm = 10*sm_base;
+
+module dm() {
+  difference() {
+    hull() {
+      translate([-dm_w/2,0,0]) cylinder(r=dm_R,h=dm_t,$fn=dm_sm);
+      translate([ dm_w/2,0,0]) cylinder(r=dm_R,h=dm_t,$fn=dm_sm);
+      translate([ 0,dm_br+dm_o+dm_r,0]) cylinder(r=dm_r+dm_T,h=dm_t,$fn=dm_sm);
+    }
+    translate([-dm_w/2,0,-1]) cylinder(r=dm_br,h=dm_t+2,$fn=dm_bsm);
+    translate([ dm_w/2,0,-1]) cylinder(r=dm_br,h=dm_t+2,$fn=dm_bsm);
+    translate([ 0,dm_br+dm_o+dm_r,-1]) cylinder(r=dm_r,h=dm_t+2,$fn=dm_sm);
+  }
+}
+
 module assembly() {
   support();
   color([0.5,0,0,1]) 
@@ -232,3 +255,5 @@ assembly();
 
 //plate1();
 //plate2();
+
+//dm();
