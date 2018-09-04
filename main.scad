@@ -166,6 +166,51 @@ module clamp() {
   }
 }
 
+plate_t1 = 2;
+plate_t2 = 1;
+plate_t = plate_t1 + plate_t2;
+plate_r1 = 8/2 - 0.1;
+plate_r2 = 18/2 + 1;
+plate_h = 82.35/2;
+plate_hr = 2/2;
+plate_cr = 4/2;
+plate_sm = 50;
+plate_hsm = 20;
+
+module plate1() {
+  difference() {
+    union() {
+      cylinder(r=plate_r1,h=plate_t,$fn=plate_sm);
+      cylinder(r=plate_r2,h=plate_t2,$fn=plate_sm);
+    }
+    translate([0,0,-1]) cylinder(r=plate_cr,h=plate_t+2,$fn=plate_sm);
+  }
+}
+module plate2() {
+  difference() {
+    union() {
+      cylinder(r=plate_r1,h=plate_t,$fn=plate_sm);
+      hull() {
+        translate([plate_h,0,0]) cylinder(r=plate_r1 + 1,h=plate_t2,$fn=plate_sm);
+        translate([-plate_h,0,0]) cylinder(r=plate_r1 + 1,h=plate_t2,$fn=plate_sm);
+      }
+      rotate(90) hull() {
+        translate([plate_h,0,0]) cylinder(r=plate_r1 + 1,h=plate_t2,$fn=plate_sm);
+        translate([-plate_h,0,0]) cylinder(r=plate_r1 + 1,h=plate_t2,$fn=plate_sm);
+      }
+    }
+    union () {
+      translate([plate_h,0,-1]) cylinder(r=plate_hr,h=plate_t2+2,$fn=plate_hsm);
+      translate([-plate_h,0,-1]) cylinder(r=plate_hr,h=plate_t2+2,$fn=plate_hsm);
+    }
+    rotate(90) union () {
+      translate([plate_h,0,-1]) cylinder(r=plate_hr,h=plate_t2+2,$fn=plate_hsm);
+      translate([-plate_h,0,-1]) cylinder(r=plate_hr,h=plate_t2+2,$fn=plate_hsm);
+    }
+    translate([0,0,-1]) cylinder(r=plate_cr,h=plate_t+2,$fn=plate_sm);
+  }
+}
+
 module assembly() {
   support();
   color([0.5,0,0,1]) 
@@ -178,9 +223,12 @@ module assembly() {
   }
 }
 
-//assembly();
+assembly();
 //rotate(180) lock();
 //base();
 //support(); // better to just print two base/lock combos
 
-clamp();
+//clamp();
+
+//plate1();
+//plate2();
