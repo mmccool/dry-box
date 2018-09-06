@@ -212,25 +212,31 @@ module plate2() {
 }
 
 dm_r = 16/2;
-dm_R = 10;
-dm_t = 10;
+dm_ro = 17/2;
+dm_br = 4.2/2;
+dm_R = 20/2;
+dm_R1 = dm_br + 2;
+dm_R2 = 6;
+dm_t = 8;
 dm_T = 5;
 dm_o = 9;
 dm_w = 51.3;
-dm_br = 4.2/2;
+
 dm_bsm = 4*sm_base;
 dm_sm = 10*sm_base;
 
 module dm() {
   difference() {
     hull() {
-      translate([-dm_w/2,0,0]) cylinder(r=dm_R,h=dm_t,$fn=dm_sm);
-      translate([ dm_w/2,0,0]) cylinder(r=dm_R,h=dm_t,$fn=dm_sm);
+      translate([-dm_w/2,0,0]) cylinder(r1=dm_R1,r2=dm_R2,h=dm_t,$fn=dm_sm);
+      translate([ dm_w/2,0,0]) cylinder(r1=dm_R1,r2=dm_R2,h=dm_t,$fn=dm_sm);
       translate([ 0,dm_br+dm_o+dm_r,0]) cylinder(r=dm_r+dm_T,h=dm_t,$fn=dm_sm);
     }
     translate([-dm_w/2,0,-1]) cylinder(r=dm_br,h=dm_t+2,$fn=dm_bsm);
     translate([ dm_w/2,0,-1]) cylinder(r=dm_br,h=dm_t+2,$fn=dm_bsm);
     translate([ 0,dm_br+dm_o+dm_r,-1]) cylinder(r=dm_r,h=dm_t+2,$fn=dm_sm);
+    translate([ 0,dm_br+dm_o+dm_r,-1]) cylinder(r1=dm_ro+1,r2=0,h=dm_ro+1,$fn=dm_sm);
+    translate([ 0,dm_br+dm_o+dm_r,dm_t-dm_ro]) cylinder(r1=0,r2=dm_ro+1,h=dm_ro+1,$fn=dm_sm);
   }
 }
 
@@ -246,7 +252,7 @@ module assembly() {
   }
 }
 
-assembly();
+//assembly();
 //rotate(180) lock();
 //base();
 //support(); // better to just print two base/lock combos
@@ -256,4 +262,4 @@ assembly();
 //plate1();
 //plate2();
 
-//dm();
+dm();
