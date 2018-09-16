@@ -289,13 +289,17 @@ module assembly() {
   }
 }
 
-difference() {
-  assembly();
-  translate([0,0,-100]) cube([200,200,600]);
+module cutaway() {
+  difference() {
+    assembly();
+    translate([0,0,-100]) cube([200,200,600]);
+  }
 }
-//assembly();
+
+//cutaway();
+assembly();
 //oring();
-//rotate(180) lock();
+//lock();
 //base();
 //support(); // better to just print two base/lock combos
 
